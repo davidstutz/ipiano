@@ -27,7 +27,7 @@ This implementation provides two variants of the algorithm: nmiPiano and iPiano.
 
 ## Building
 
-The project is based on [CMake](), [Boost](), [Eigen](), [GLog]() as well as [OpenCV]() and has been tested on Ubuntu 12.04 and Ubuntu 14.04:
+The project is based on [CMake](https://cmake.org/), [Boost](http://www.boost.org/doc/libs/1_57_0/doc/html/boost_random/performance.html), [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page), [GLog](https://github.com/google/glog) as well as [OpenCV](http://docs.opencv.org/2.4/doc/tutorials/introduction/linux_install/linux_install.html#linux-installation) (tested with OpenCV 2.x) and has been tested on Ubuntu 12.04 and Ubuntu 14.04:
 
     sudo apt-get install build-essential cmake libeigen3-dev libboost-all-dev
 
@@ -39,6 +39,23 @@ For installation instructions of GLog and OpenCV, please see consult the respect
     cd build
     cmake ..
     make
+    Scanning dependencies of target signal_denoising_cli
+	[ 25%] Building CXX object signal_denoising_cli/CMakeFiles/signal_denoising_cli.dir/main.cpp.o
+	Linking CXX executable signal_denoising_cli
+	[ 25%] Built target signal_denoising_cli
+	Scanning dependencies of target image_denoising_cli
+	[ 50%] Building CXX object image_denoising_cli/CMakeFiles/image_denoising_cli.dir/main.cpp.o
+	Linking CXX executable image_denoising_cli
+	[ 50%] Built target image_denoising_cli
+	Scanning dependencies of target phase_field_cli
+	[ 75%] Building CXX object phase_field_cli/CMakeFiles/phase_field_cli.dir/main.cpp.o
+	Linking CXX executable phase_field_cli
+	[ 75%] Built target phase_field_cli
+	Scanning dependencies of target phase_field_color_cli
+	[100%] Building CXX object phase_field_color_cli/CMakeFiles/phase_field_color_cli.dir/main.cpp.o
+	Linking CXX executable phase_field_color_cli
+	[100%] Built target phase_field_color_cli
+
 
 **The modules in `cmake/` may have to be adapted depending on the Eigen and GLog installations!**
 
