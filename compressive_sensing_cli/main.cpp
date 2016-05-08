@@ -170,7 +170,7 @@ int main(int argc, char** argv)
     //nmi_options.L_0m1 = 100.f;
     nmi_options.beta = 0.5;
     nmi_options.eta = 1.05;
-    nmi_options.epsilon = 1e-8;
+    nmi_options.epsilon = 1e-6;
     
     std::function<void(const nmiPiano::Iteration &iteration)> nmi_bound_callback 
             = std::bind(nmiPiano::default_callback, std::placeholders::_1, 10);
