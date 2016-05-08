@@ -56,8 +56,61 @@ For installation instructions of GLog and OpenCV, please see consult the respect
 	Linking CXX executable phase_field_color_cli
 	[100%] Built target phase_field_color_cli
 
-
 **The modules in `cmake/` may have to be adapted depending on the Eigen and GLog installations!**
+
+The documentation can be built using Doxygen:
+
+    doxygen config.doxygen
+
+## Examples
+
+This repository contains several examples; the usage gets apparent when using the `--help` option.
+
+The signal denoising example demonstrates the usage of iPiano to denoise one-dimensional signals:
+
+    $ ./signal_denoising_cli/signal_denoising_cli --help
+    Allowed options:
+      --seed arg (=1462728373) seed
+      -h [ --help ]            produce help message
+
+The image denoising example takes an input image (e.g. `3096.jpg` from the Berkeley Segmentation Dataset [3]), applies Gaussian noise and denoises the result using iPiano:
+
+    $ ./image_denoising_cli/image_denoising_cli --help
+    Allowed options:
+      --image arg                    image file
+      --sigma arg (=0.0500000007)    noise level
+      --lambda arg (=0.100000001)    balancing term between unary and pairwise term
+      --iterations arg (=250)        number of iterations
+      --eta arg (=1.04999995)        eta, i.e. coefficient to choose local 
+                                     Lipschitz constant
+      --beta arg (=0.5)              momentum parameter (for nmiPiano) or 
+                                     initialization of momentum parameter (iPiano)
+      --c1 arg (=9.99999996e-13)     c1 for iPiano
+      --c2 arg (=9.99999996e-13)     c2 for iPiano
+      --epsilon arg (=0.00100000005) epsilon for iPiano
+      -h [ --help ]                  produce help message
+
+    [3] P. Arbelaez, M. Maire, C. Fowlkes and J. Malik.
+        Contour Detection and Hierarchical Image Segmentation
+        Pattern Analysis and Machine Learning, vol. 33, 2011.
+
+The two phase field examples (phase field on grayscale and phase field on color) demonstrate the usage of iPiano for image segmentation:
+
+    $ ./phase_field_cli/phase_field_cli --help
+    Allowed options:
+      --image arg           image
+      -h [ --help ]         produce help message
+
+The compressive sensing example demonstrates the usage of iPiano for recovering a one-dimensional sparse signal (e.g. see [4] for details):
+
+    $ ./compressive_sensing_cli/compressive_sensing_cli --help
+    Allowed options:
+      --seed arg (=1462728204) seed
+      -h [ --help ]            produce help message
+
+    [4] G. Kutyniok.
+        Compressed Sensing: Theory and Applications.
+        Computing Research Repository, abs/1203.3815, 2012.
 
 ## Usage
 
@@ -118,29 +171,9 @@ Usage can be illustrated using the example of one-dimensional signal denoising a
 
 The corresponding usage of iPiano can be found in `signal_denoising_cli`. The functional to be optimized has to be provided as `std::function` and is expected to have the following form:
 
-    /** \brief Possibly non-convex but smooth part, i.e. f.
-    \param[in] x
-    \return f(x)
-     */
     static float f(const Eigen::MatrixXf &x);
-
-    /** \brief Derivative of f, i.e. \nabla f.
-    \param[in] x
-    \param[out] df_x
-     */
     static void df_lorentzianPairwise(const Eigen::MatrixXf &x, Eigen::MatrixXf &df_x);
-    
-    /** \brief Convex but possibly non-smooth part, i.e. g.
-    \param[in] x
-    \return
-     */
     static float g_absoluteUnary(const Eigen::MatrixXf &x);
-        
-    /** \brief Proximal map of g.
-    \param[in] x
-    \param[out] prox_f_x
-    \param[in] alpha
-     */
     static void prox_g_absoluteUnary(const Eigen::MatrixXf &x, Eigen::MatrixXf &prox_f_x, float alpha);
 
 Additional parameters are possible but have to be provided through `std::bind`, as for example done with `g_absoluteUnary` which in addition to the above parameters also expects the noisy signal in order to implement the absolute data term:
@@ -230,6 +263,8 @@ Example segmentations are shown in the introduction.
 
 ## License
 
+The provided image is taken from the Berkeley Segmentation Dataset [3].
+
 Copyright (c) 2016, David Stutz
 All rights reserved.
 
@@ -238,6 +273,6 @@ are permitted provided that the following conditions are met:
 
 * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-*Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+* Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.

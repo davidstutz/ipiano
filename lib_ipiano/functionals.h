@@ -43,6 +43,7 @@
 #define	FUNCTIONALS_H
 
 #include <Eigen/Dense>
+#include <Eigen/Core>
 #include <opencv2/opencv.hpp>
 #include <glog/logging.h>
 
@@ -380,6 +381,53 @@ public:
          * \param[out] Cm
          */
         static void Cm(const Eigen::MatrixXf &x, const Eigen::MatrixXf &x_0, Eigen::Vector3f &Cm);
+    };
+    
+    /** \brief Compressive sensing example using convex optimization as discussed in [1]:
+     * [1] G. Kutyniok.
+     *     Compressed Sensing: Theory and Applications.
+     *     Computing Research Repository, abs/1203.3815, 2012.
+     */
+    class CompressiveSensing
+    {
+    public:
+        /** \brief Differentiable but non-convex part: \|Ax - y\|_2^2. 
+         * \param[in] x
+         * \param[in] epsilon
+         */
+        static float f(const Eigen::MatrixXf &x, const Eigen::MatrixXf &A, 
+                const Eigen::MatrixXf &y, float lambda);
+        
+        /** \brief Derivative of f.
+         * \param[in] x
+         * \param[out] df_x
+         * \param[in] epsilon
+         */
+        static void df(const Eigen::MatrixXf &x, const Eigen::MatrixXf &A, 
+                const Eigen::MatrixXf &y, Eigen::MatrixXf &df_x, float lambda);
+        
+        /** \brief Non-differentiable but convex part: \|x\|_1. 
+         * \param[in] x
+         * \param[in] x_0
+         * \param[in] Cp
+         * \param[in] Cm
+         * \param[in] epsilon
+         * \param[in] lambda
+         */
+        static float g(const Eigen::MatrixXf &x);
+        
+        /** \brief Proximal map of g.
+         * \param[in] x
+         * \param[in] x_0
+         * \param[out] prox_g_x
+         * \param[in] Cp
+         * \param[in] Cm
+         * \param[in] epsilon
+         * \param[in] lambda
+         * \param[in] alpha
+         */
+        static void prox_g(const Eigen::MatrixXf &x, Eigen::MatrixXf &prox_g_x, 
+                float alpha);
     };
 };
 
@@ -1247,6 +1295,65 @@ void Functionals::PhaseField_Color::Cm(const Eigen::MatrixXf &x, const Eigen::Ma
     }
     
     Cm = Cm_nom;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Functionals::CompressiveSensing::f
+////////////////////////////////////////////////////////////////////////////////
+
+float Functionals::CompressiveSensing::f(const Eigen::MatrixXf &x, const Eigen::MatrixXf &A,
+        const Eigen::MatrixXf &y, float lambda)
+{
+    Eigen::MatrixXf y_diff = A*x - y;
+    return 1.f/lambda*0.5f*y_diff.squaredNorm();
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Functionals::CompressiveSensing::df
+////////////////////////////////////////////////////////////////////////////////
+
+void Functionals::CompressiveSensing::df(const Eigen::MatrixXf &x, const Eigen::MatrixXf &A,
+        const Eigen::MatrixXf &y, Eigen::MatrixXf &df_x, float lambda)
+{
+    df_x = 1.f/lambda*((A.transpose()*A*x) - A.transpose()*y);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Functionals::CompressiveSensing::g
+////////////////////////////////////////////////////////////////////////////////
+
+float Functionals::CompressiveSensing::g(const Eigen::MatrixXf &x)
+{
+    return x.lpNorm<1>();
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Functionals::CompressiveSensing::prox_g
+////////////////////////////////////////////////////////////////////////////////
+
+void Functionals::CompressiveSensing::prox_g(const Eigen::MatrixXf &x, 
+        Eigen::MatrixXf &prox_g_x, float alpha)
+{
+    prox_g_x = Eigen::MatrixXf::Zero(x.rows(), x.cols());
+    
+    for (int i = 0; i < x.rows(); i++)
+    {
+        for (int j = 0; j < x.cols(); j++)
+        {
+            if (x(i, j) >= alpha)
+            {
+                prox_g_x(i, j) = x(i, j) - alpha;
+            }
+            else if (std::abs(x(i, j)) < alpha)
+            {
+                prox_g_x(i, j) = 0;
+            }
+            else
+            {
+                prox_g_x(i, j) = x(i, j) + alpha;
+            }
+        }
+    }
 }
 
 #endif	/* FUNCTIONALS_H */
