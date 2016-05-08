@@ -9,6 +9,8 @@ iPiano, proposed in [1], is an optimization algorithm combining forward-backward
         Seminar paper "iPiano: Inertial Proximal Algorithm for Non-Convex Optimization"
         https://github.com/davidstutz/seminar-ipiano
 
+**Doxygen documentation now available at [http://davidstutz.github.io/ipiano/](http://davidstutz.github.io/ipiano/).**
+
 ## Introduction
 
 Similar to forward-backward splitting, the algorithm tackles problems of the form
