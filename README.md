@@ -1,5 +1,7 @@
 # iPiano
 
+[![Build Status](https://travis-ci.org/davidstutz/ipiano.svg?branch=master)](https://travis-ci.org/davidstutz/ipiano)
+
 iPiano, proposed in [1], is an optimization algorithm combining forward-backward splitting with an inertial force. This repository contains a C++ implementation of iPiano with applications to computer vision tasks. The implementation was submitted as part of a seminar paper [2] written at RWTH Aachen University and advised by [Prof. Berkels](https://www.aices.rwth-aachen.de/people/berkels).
 
     [1] P. Ochs, Y. Chen, T. Brox, T. Pock.
