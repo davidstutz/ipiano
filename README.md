@@ -31,7 +31,7 @@ This implementation provides two variants of the algorithm: nmiPiano and iPiano.
 
 The project is based on [CMake](https://cmake.org/), [Boost](http://www.boost.org/doc/libs/1_57_0/doc/html/boost_random/performance.html), [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page), [GLog](https://github.com/google/glog) as well as [OpenCV](http://docs.opencv.org/2.4/doc/tutorials/introduction/linux_install/linux_install.html#linux-installation) (tested with OpenCV 2.x) and has been tested on Ubuntu 12.04 and Ubuntu 14.04:
 
-    sudo apt-get install build-essential cmake libeigen3-dev libboost-all-dev libopencv-dev libgoogle-glog-dev
+    sudo apt-get install build-essential cmake libeigen3-dev libboost-all-dev libopencv-dev libgoogle-glog-dev libeigen3-dev
 
 The project is then compiled using:
 

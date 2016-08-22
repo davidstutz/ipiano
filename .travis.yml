@@ -8,6 +8,7 @@ before_script:
     - sudo apt-get install cmake
     - sudo apt-get install libboost-all-dev
     - sudo apt-get install libopencv-dev
+    - sudo apt-get install libeigen3-dev
     # Glog through apt-get does not work ...
     - git clone https://github.com/davidstutz/glog
     - cd glog
