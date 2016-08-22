@@ -8,9 +8,15 @@ before_script:
     - sudo apt-get install cmake
     - sudo apt-get install libboost-all-dev
     - sudo apt-get install libopencv-dev
-    - sudo apt-get install libgoogle-glog-dev
+    # Glog through apt-get does not work ...
+    - git clone https://github.com/davidstutz/glog
+    - cd glog
+    - git reset --hard 0b0b022
+    - ./configure
+    - make
+    - cd ..
     - mkdir build
     - cd build
-    - cmake ..
+    - cmake .. -DGLOG_ROOT_DIR=../glog
 
 script: make 

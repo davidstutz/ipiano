@@ -19,6 +19,7 @@ find_path(GLOG_INCLUDE_DIR glog/logging.h
         /usr/local
         /usr
         ~/glog-master
+        ./build/glog
     PATH_SUFFIXES
         src)
 
@@ -29,6 +30,7 @@ find_library(GLOG_LIBRARY glog libglog
         /usr/local
         /usr
         ~/glog-master
+        ./build/glog
     PATH_SUFFIXES
         .libs
         lib
